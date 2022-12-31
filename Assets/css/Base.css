@@ -1,0 +1,140 @@
+﻿
+.topnav {
+    list-style: none;
+    text-align: center;
+    padding: 0px;
+    margin-bottom: 8px;
+    background-color: #3a3f44;
+    height: 40px;
+    overflow: hidden;
+}
+
+    .topnav a {
+        text-decoration: none;
+        display: block;
+        padding: 12px;
+        font-size: 13px;
+        float: right
+    }
+
+        .topnav a:hover {
+            background: #FBEEE6;
+            transition: 0.4s;
+        }
+
+.topnavdd {
+    float: right;
+}
+
+.topnavdd-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    margin-top: 39px;
+}
+
+    .topnavdd-content a, button {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+
+        .topnavdd-content a:hover, button:hover {
+            background-color: #ddd;
+        }
+
+.topnavdd:hover .topnavdd-content {
+    display: block;
+}
+
+
+#nav {
+    position: fixed;
+    width: 850px;
+    top: 80px;
+    left: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translate(-50%, -50%);
+}
+
+    #nav input {
+        width: 200px;
+    }
+
+
+
+#SignupPopup {
+    display: none;
+}
+
+
+#Loadingscreen {
+    display: none;
+}
+
+#CompleteSignUp {
+    display: none;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    position: relative;
+    left: 36%;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.invalid-feedback {
+    display: none;
+    position: relative;
+}
+
+.valid-feedback {
+    display: none;
+    position: relative;
+}
+
+.form-control {
+    width: 380px;
+    height: 40px;
+}
+
+
+.alert {
+    display: none;
+    position:absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+

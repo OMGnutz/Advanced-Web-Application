@@ -1,0 +1,62 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin2.master.cs" Inherits="_211792H.MasterPages.Admin" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link rel="stylesheet" type="text/css" href="../Assets/css/bootstraptheme.css" runat="server" />
+    <link rel="stylesheet" type="text/css" href="../Assets/css/AdminBase.css" runat="server" />
+   
+</head>
+<body>
+    <form id="form1" runat="server">
+
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+              <div class="container-fluid">
+                <a class="navbar-brand" href="#">Logo</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                  <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                      <asp:Image runat="server" ID="userimage" CssClass="nav-link"/>  
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="username"></a>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Logout</a>
+                      </div>
+                    </li>
+                  </ul> 
+                </div>
+              </div>
+            </nav>
+
+            <div class="sidebar bg-primary" style="position: fixed; top:0px;">
+              <a class="active" href="#home" id="Dashboardlink">Dashboard</a>
+              <a href="#news" id="OrdersLink">Manage Orders</a>
+              <a href="../Admin/GameProducts.aspx" id="ProductsLink">Manage Products</a>
+              <a href="#about" id="UsersLink">Manage Users</a>
+            </div>
+
+                <div class="contents" style="margin-left:200px">
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                </asp:ContentPlaceHolder>
+                </div>
+                
+
+               
+       
+    </form>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".alert").delay(5000).slideUp(300);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Base.master.cs" Inherits="_211792H.MasterPages.Base" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    
+
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="../Assets/css/bootstraptheme.css" />
+    <link rel="stylesheet" type="text/css" href="~/Assets/css/Base.css" runat="server" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function validateEmail(sender, args) {
+            document.getElementById("invalidEmail").style.display = "none";
+            document.getElementById("txt_Email").classList.remove("is-invalid")
+            if (args.Value == "") {
+                args.IsValid = false;
+                document.getElementById("invalidEmail").style.display = "block";
+                document.getElementById("txt_Email").classList.add("is-invalid")
+            }
+            else {
+                var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!filter.test(args.Value)) {
+                    args.IsValid = false;
+                    document.getElementById("invalidEmail").style.display = "block";
+                    document.getElementById("txt_Email").classList.add("is-invalid")
+                }
+            }
+        }
+
+        function CompareEmailF(sender, args) {
+            document.getElementById("EmailnotMatch").style.display = "none";
+            document.getElementById("txt_CEmail").classList.remove("is-invalid")
+            if (document.getElementById("txt_CEmail").value != document.getElementById("txt_Email").value) {
+                args.IsValid = false;
+                document.getElementById("EmailnotMatch").style.display = "block";
+                document.getElementById("txt_CEmail").classList.add("is-invalid")
+            }
+        }
+    </script>
+    
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="alert alert-dismissible alert-success" id="PRalert" runat="server" style="width:700px">
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <strong>Email sent!</strong> Please check your email for instructions on changing your password.
+        </div>
+        
+        <div class="topnav">
+            <a href="#" id="LogIn">Login</a>
+            <a href="#" id="Signup">SignUp</a>
+        </div>
+
+
+        <div class="modal" id="SignupPopup" runat="server">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Create Your Account</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="popupinteract()">
+                        <span aria-hidden="true"></span>
+                    </button>
+                    </div>
+                   
+                    <div class="modal-body">
+                        <asp:Label ID="lblEmail" runat="server" Text="Email Address"></asp:Label>
+                        <br />
+                        <div class="form-group">
+                        <asp:TextBox ID="txt_Email" CssClass="form-control" runat="server" TextMode="Email"></asp:TextBox>
+                        <div class="invalid-feedback" id="invalidEmail">Please use a valid email</div>
+                        <asp:CustomValidator ValidationGroup="EmailVerify" ID="CV" runat="server" EnableClientScript="true" ValidateEmptyText="true" ClientValidationFunction="validateEmail" ControlToValidate="txt_Email"></asp:CustomValidator>
+                        </div>
+                        <br />
+                        <br />
+                        <asp:Label ID="lblCEmail" runat="server" Text="Confirm Email Address"></asp:Label>
+                        <br />
+                        <div class="form-group">
+                        <asp:TextBox ID="txt_CEmail" CssClass="form-control" runat="server" TextMode="Email"></asp:TextBox>
+                        <div class="invalid-feedback" id="EmailnotMatch">Emails do not match.</div>
+                        <asp:CustomValidator ValidateEmptyText="true" ValidationGroup="EmailVerify" ID="CompareEmail" runat="server" EnableClientScript="true" ClientValidationFunction="CompareEmailF" ControlToValidate="txt_CEmail"></asp:CustomValidator>
+                        </div>
+                        <br />
+                        <div class="invalid-feedback" id="EmailExist" runat="server">Email already exists</div>
+                    </div>
+                   
+
+                    <div class="modal-footer">
+                            <asp:Button ID="submitEmail2" CssClass="btn btn-primary" runat="server" Text="Verify Email" OnClick="VerifyEmail"  UseSubmitBehavior="false" data-dismiss="modal" ValidationGroup="EmailVerify"/>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="popupinteract()">Close</button>    
+                    </div>
+            </div>
+            </div>
+        </div>
+        
+
+
+        <div class="modal" id="LoadingScreen" runat="server">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Waiting For Verification...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('LoadingScreen').style.display='none'">
+                    <span aria-hidden="true"></span>
+                </button>
+                </div>
+                <div class="modal-body">
+                       <div class="loader">
+                       </div> 
+                </div>
+                <div class="modal-footer" style="justify-content:flex-start">
+                    <p>Haven't receive your email? Try checking your spam folder</p>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="modal" id="CompleteSignUp" runat="server">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Create Your Account</h5>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('CompleteSignUp').style.display='none'">
+                        <span aria-hidden="true"></span>
+                 </button>
+              </div>
+              <div class="modal-body">
+                  <asp:Label ID="lblusername" runat="server" Text="Username"></asp:Label>
+                  <br />
+                  <div class="form-group">
+                  <asp:TextBox ID="txt_username" CssClass="form-control" runat="server" onKeyUp="CheckUsernameTaken()" ></asp:TextBox>
+                  <div class="invalid-feedback" runat="server" id="userExist">Sorry, that username's taken.</div> 
+                  <div class="valid-feedback" id="usernameAvailable">Username available.</div>
+                  <asp:CustomValidator ValidateEmptyText="true" ValidationGroup="AccVerify" ID="CustomValidatorUsername" runat="server" EnableClientScript="true" ClientValidationFunction="UsernamExists" ControlToValidate="txt_username" ></asp:CustomValidator>
+                  </div>
+                  <br />
+                  <br />
+                  <asp:Label ID="lblPassword" runat="server" Text="Password"></asp:Label>
+                  <br />
+                  <div class="form-group">
+                  <asp:TextBox ID="txt_password" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
+                  <div class="invalid-feedback" runat="server" id="WeakPass">Please use a strong password</div> 
+                  <br />
+                  <asp:CustomValidator ValidateEmptyText="true" ValidationGroup="AccVerify" ID="CustomValidatorPassword" runat="server" EnableClientScript="true" ClientValidationFunction="StrongPassword" ControlToValidate="txt_password"></asp:CustomValidator>
+                  </div>
+                  <br />
+                  <br />
+                  <asp:Label ID="lblCPassword" runat="server" Text="Confirm Password"></asp:Label>
+                  <br />
+                  <div class="form-group">
+                  <asp:TextBox ID="txt_Cpassword" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
+                  <div class="invalid-feedback" runat="server" id="CPass">Passwords do not match</div> 
+                  <br />
+                  <asp:CustomValidator ValidateEmptyText="true" ValidationGroup="AccVerify" ID="ComparePass" runat="server" EnableClientScript="true" ClientValidationFunction="ComparePassword" ControlToValidate="txt_Cpassword"></asp:CustomValidator>
+                  </div>  
+              </div>
+              <div class="modal-footer">
+                  <asp:Button ID="createAcc" CssClass="btn btn-primary" runat="server" Text="Create Account" OnClick="AccCreation" UseSubmitBehavior="false" ValidationGroup="AccVerify" data-dismiss="modal" />
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('CompleteSignUp').style.display='none'">Close</button>    
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal" id="RegistrationComplete" runat="server">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">WELCOME</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('RegistrationComplete').style.display='none'">
+                  <span aria-hidden="true"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Your Account has been created, you can proceed with login now</p>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal" id="LoginPopUp" runat="server">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('LoginPopUp').style.display='none'">
+                  <span aria-hidden="true"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <asp:Label ID="lblusernameLogin" runat="server" Text="Username"></asp:Label>
+                <asp:TextBox ID="txt_usernameLogin" CssClass="form-control" runat="server"></asp:TextBox>
+                <br />
+                <asp:Label ID="lblpasswordLogin" runat="server" Text="Password"></asp:Label>
+                <div class="form-group">
+                <asp:TextBox ID="txt_passwordLogin" CssClass="form-control" runat="server" TextMode="Password"></asp:TextBox>
+                <div class="invalid-feedback" runat="server" id="Wrongcredentials">Your username or password is incorrect</div>
+                <div class="invalid-feedback" runat="server" id="TooManyAttempts">Your account has been locked. Please try again later.</div>
+                <br />
+                <p class="text-warning" id="ForgetPass"><a href="#" style="text-decoration:underline" onclick="document.getElementById('ForgetPasswordPopUp').style.display='block'; document.getElementById('LoginPopUp').style.display='none'">Forget Password?</a></p>
+              </div>
+              <div class="modal-footer">
+                <asp:Button ID="ButtonLogin" CssClass="btn btn-primary" runat="server" Text="Login" OnClick="AccLogin" UseSubmitBehavior="false" ValidationGroup="Login" data-dismiss="modal" />
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('LoginPopUp').style.display='none'">Close</button>
+              </div>
+            </div>
+          </div>
+         </div>
+        </div>
+
+        <div class="modal" id="ForgetPasswordPopUp" runat="server" style="display:none">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Forget Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('ForgetPasswordPopUp').style.display='none'">
+                  <span aria-hidden="true"></span>
+                </button>
+              </div>
+              <div class="modal-body">
+                 <asp:Label ID="lblForgetPassword" runat="server" Text="Enter your username or email"></asp:Label>
+                  <div class="form-group">
+                      <asp:TextBox ID="txt_ForgetPass" CssClass="form-control" runat="server"></asp:TextBox>
+                      <div class="invalid-feedback" runat="server" id="NotExist">Sorry, we were unable to find an account that matched your search</div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <asp:Button ID="ButtonForgetPass" CssClass="btn btn-primary" runat="server" Text="Forget Password" OnClick="Forgetpass" UseSubmitBehavior="false" ValidationGroup="Login" data-dismiss="modal" />
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="document.getElementById('ForgetPasswordPopUp').style.display='none'">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="nav">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+              <ul class="navbar-nav me-auto">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">New & Noteworthy</a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                  </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Categories</a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                  </div>
+                </li>
+
+                  <li class="nav-item">
+                  <a class="nav-link" href="#">Monthly Free Item</a>
+                </li>
+
+              </ul>
+              <form class="d-flex" action="#">
+                <input class="form-control me-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+
+        
+        
+        
+        
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    
+    </form>
+
+    <script type="text/javascript">
+        const signup = document.getElementById("Signup");
+        const login = document.getElementById("LogIn");
+        login.addEventListener("click", loginpopupinteract);
+        signup.addEventListener("click", popupinteract);
+
+        function popupinteract() {
+            const popup = document.getElementById("SignupPopup");
+            console.log(popup);
+            if (popup.style.display == "block") {
+                popup.style.display = "none";
+            }
+
+            else {
+                popup.style.display = "block";
+            }
+
+           
+        }
+
+        function loginpopupinteract() {
+            const popup = document.getElementById("LoginPopUp");
+            if(popup.style.display == "block") {
+                popup.style.display = "none";
+            }
+
+            else {
+                popup.style.display = "block";
+            }
+        }
+
+
+
+        function verify() {
+            document.getElementById("LoadingScreen").style.display = "none";
+            document.getElementById("CompleteSignUp").style.display = "block";
+        }
+    </script>
+
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
+    <script src="../Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="../signalr/hubs"></script>
+    <script type="text/javascript">
+        var noti = $.connection.triggerHub;
+        console.log(noti);
+        noti.client.updateMessages = function () {
+            document.getElementById("LoadingScreen").style.display = "none";
+            document.getElementById("CompleteSignUp").style.display = "block";
+        };
+        $.connection.hub.start();
+        $.connection.hub.start().done(function () {
+            console.log("connection started") 
+        });
+       
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".alert").delay(5000).slideUp(300);
+        });
+        function CheckUsernameTaken() {
+            $.ajax({
+                url: '/CheckUsernameTaken/GetResult',
+                type: "GET",
+                dataType: "JSON",
+                data: { userinput: $('#txt_username').val() },
+                success: function (data) {
+                    $('#usernameAvailable').css("display", "none");
+                    $('#txt_username').removeClass('is-valid')
+                    if (data == "exist") {
+                        if ($('#userExist').text() == "Please enter a valid name") {
+                            $('#userExist').text($('#userExist').text().replace("Please enter a valid name", "Sorry, that username's taken."))
+                        }
+                        $('#userExist').css("display", "block");
+                        $('#txt_username').addClass('is-invalid')
+                        
+                    }
+
+                    else {
+                        if ($('#txt_username').hasClass('is-invalid')) {
+                            $('#txt_username').removeClass('is-invalid')
+                            
+                        }
+                        $('#userExist').css("display", "none"); 
+
+                    }
+                }
+                })
+        };
+
+
+        function UsernamExists(sender, args , event) {
+            console.log(sender);
+            if (document.getElementById("txt_username").classList.contains("is-invalid")) {
+                args.IsValid = false;
+            }
+
+            else {
+                document.getElementById("usernameAvailable").style.display = "block";
+                document.getElementById("txt_username").classList.add('is-valid');
+            }
+
+            if (document.getElementById("txt_username").value.match(/^\s+$/) !== null || document.getElementById("txt_username").value == "") {
+                document.getElementById("usernameAvailable").style.display = "none";
+                document.getElementById("txt_username").classList.remove('is-valid');
+                document.getElementById("txt_username").classList.add('is-invalid');
+                document.getElementById("userExist").innerText = "Please enter a valid name";
+                document.getElementById("userExist").style.display = "block";
+                args.IsValid = false;
+            }
+
+
+
+        };
+
+        function StrongPassword(sender, args) {
+            var decimal = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+            
+            if (document.getElementById("txt_password").value.match(decimal) ) {
+                console.log("strong");
+                document.getElementById("txt_password").classList.remove('is-invalid');
+                document.getElementById("WeakPass").style.display = "none";
+            }
+
+            else {
+                console.log("weak");
+                console.log(document.getElementById("txt_password").value.match(decimal));
+                document.getElementById("txt_password").classList.add('is-invalid');
+                document.getElementById("WeakPass").style.display = "block";
+                args.IsValid = false;
+            }
+        }
+
+        function ComparePassword(sender, args) {
+            if (document.getElementById("txt_Cpassword").value != document.getElementById("txt_password").value) {
+                document.getElementById("CPass").style.display = "block";
+                document.getElementById("txt_Cpassword").classList.add("is-invalid")
+                args.IsValid = false;
+            }
+
+            else {
+                document.getElementById("CPass").style.display = "none";
+                document.getElementById("txt_Cpassword").classList.remove('is-invalid')
+            }
+        }
+
+        
+    </script>
+
+
+
+    
+    
+
+</body>
+</html>
