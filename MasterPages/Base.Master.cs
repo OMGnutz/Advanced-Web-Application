@@ -20,8 +20,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Web.Optimization;
 using System.Web.Mvc;
 using System.Threading;
-
-
+using System.Web.Globalization;
+using Microsoft.Ajax.Utilities;
 
 namespace _211792H.MasterPages
 {
@@ -30,17 +30,134 @@ namespace _211792H.MasterPages
         public static string tempemail;
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString;
         private static string emailLink;
-        private static string fpemail;
+        public static string fpemail;
+        private static string username;
         protected void Page_Load(object sender, EventArgs e)
         {
-           
+            initProducts();
+        }
 
+        protected void initProducts()
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
+            conn.Open();
+            //Special Offer Expires
+            List<string> OfferEnded = new List<string>();
+            string selectprod = "SELECT Id, SaleTime From [GameProducts] WHERE DiscountedPrice IS NOT NULL";
+            SqlCommand slctcmd = new SqlCommand(selectprod, conn);
+            SqlDataReader reader = slctcmd.ExecuteReader();
+            while (reader.Read())
+            {
+                if (Convert.ToDateTime(reader["SaleTime"]) < DateTime.UtcNow)
+                {
+                    OfferEnded.Add(reader["Id"].ToString());
+                }
+            }
+
+            reader.Close();
+        
+            foreach (string id in OfferEnded)
+            {
+                string updateprod = "UPDATE [GameProducts] SET DiscountedPrice=@price , SaleTime=@time WHERE Id=@id";
+                SqlCommand uptcmd = new SqlCommand(updateprod, conn);
+                uptcmd.Parameters.AddWithValue("@id", id);
+                uptcmd.Parameters.AddWithValue("@price",DBNull.Value);
+                uptcmd.Parameters.AddWithValue("@time", DBNull.Value);
+                uptcmd.ExecuteNonQuery();
+            }
+
+            //Update Reviews
+            List<string> productIDs = new List<string>();
+            string slctprod = "SELECT Id FROM [GameProducts]";
+            SqlCommand slctcmd2 = new SqlCommand(slctprod, conn);
+            SqlDataReader reader1 = slctcmd2.ExecuteReader();
+            while (reader1.Read())
+            {
+                productIDs.Add(reader1["Id"].ToString());
+            }
+            reader1.Close();
+
+            foreach(string id in productIDs)
+            {
+                string slctreview = "SELECT COUNT(*) FROM [ProductReviews] WHERE ProductId=@id";
+                SqlCommand slctreviewcmd = new SqlCommand(slctreview, conn);
+                slctreviewcmd.Parameters.AddWithValue("@id", id);
+                int allreviews = (int)slctreviewcmd.ExecuteScalar();
+                if (allreviews == 0)
+                {
+                    string updateProd = "UPDATE [GameProducts] SET OverallReviews=@review WHERE Id=@id";
+                    SqlCommand uptReviewcmd = new SqlCommand(updateProd, conn);
+                    uptReviewcmd.Parameters.AddWithValue("@review", "No Reviews");
+                    uptReviewcmd.Parameters.AddWithValue("@id" , id);
+                    uptReviewcmd.ExecuteNonQuery();
+                }
+
+                else
+                {
+                    string slctgdreviews = "SELECT Count(*) FROM [ProductReviews] WHERE ProductId=@id AND Reccomended=@recommend";
+                    SqlCommand slctgdreviewcmd = new SqlCommand(slctgdreviews, conn);
+                    slctgdreviewcmd.Parameters.AddWithValue("@id", id);
+                    slctgdreviewcmd.Parameters.AddWithValue("@recommend", true);
+                    int gdreviews = (int)slctgdreviewcmd.ExecuteScalar();
+                    Debug.WriteLine(gdreviews);
+                    Debug.WriteLine(allreviews.ToString() );
+                    int positiveperc = Convert.ToInt32(gdreviews / (Convert.ToDecimal(allreviews) / 100));
+                    string updateProd = "UPDATE [GameProducts] SET OverallReviews=@review WHERE Id=@id";
+                    SqlCommand uptReviewcmd = new SqlCommand(updateProd, conn);
+                    uptReviewcmd.Parameters.AddWithValue("@id", id);
+                    if (positiveperc >= 95)
+                    {
+                        uptReviewcmd.Parameters.AddWithValue("@review", "Overwhelmingly Positive");
+                        uptReviewcmd.ExecuteNonQuery();
+                    }
+
+                    else if (positiveperc >= 80)
+                    {
+                        uptReviewcmd.Parameters.AddWithValue("@review", "Very Positive");
+                        uptReviewcmd.ExecuteNonQuery();
+                    }
+
+                    else if (positiveperc >= 60)
+                    {
+                        uptReviewcmd.Parameters.AddWithValue("@review", "Positive");
+                        uptReviewcmd.ExecuteNonQuery();
+                    }
+
+                    else if (positiveperc >= 45)
+                    {
+                        uptReviewcmd.Parameters.AddWithValue("@review", "Mixed");
+                        uptReviewcmd.ExecuteNonQuery();
+                    }
+
+                    else if (positiveperc >= 30)
+                    {
+                        uptReviewcmd.Parameters.AddWithValue("@review", "Negative");
+                        uptReviewcmd.ExecuteNonQuery();
+                    }
+
+                    else if (positiveperc >= 15)
+                    {
+                        uptReviewcmd.Parameters.AddWithValue("@review", "Very Negative");
+                        uptReviewcmd.ExecuteNonQuery();
+                    }
+
+                    else
+                    {
+                        uptReviewcmd.Parameters.AddWithValue("@review", "Overwhelmingly Negative");
+                        uptReviewcmd.ExecuteNonQuery();
+                    }
+                    
+                                      
+                }
+            } 
+            conn.Close();
         }
 
  
         protected void VerifyEmail(object sender, EventArgs e)
         {
             RegistrationComplete.Style.Add("display", "none");
+            LoginPopUp.Style.Add("display", "none");
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
             bool exists = false;
             conn.Open();
@@ -54,6 +171,7 @@ namespace _211792H.MasterPages
             {
                 SignupPopup.Style.Add("display", "block");
                 EmailExist.Style.Add("display", "block");
+                LoadingScreen.Style.Add("display", "none");
                 txt_CEmail.Attributes["class"] = "form-control is-invalid";
             }
 
@@ -63,7 +181,6 @@ namespace _211792H.MasterPages
                 LoadingScreen.Style.Add("display", "block");
                 try
                 {
-                    Debug.WriteLine("huh");
                     Guid newGUID = Guid.NewGuid();
                     emailLink = newGUID.ToString();
                     MailMessage newMail = new MailMessage();
@@ -125,8 +242,6 @@ namespace _211792H.MasterPages
 
         }
 
-
-
         protected void startDepend()
         {
             string verified = "SELECT Verified FROM [TempUser] WHERE Email=@Email";
@@ -165,8 +280,6 @@ namespace _211792H.MasterPages
                         TriggerHub.sendMessage();
                         txt_CEmail.Text = "";
                         txt_Email.Text = "";
-                        Debug.WriteLine(LoadingScreen.Style["display"].ToString());
-                        Debug.WriteLine(tempemail);
                         stopDepend();
 
                     }
@@ -233,19 +346,30 @@ namespace _211792H.MasterPages
                     string chkstatus = "SELECT AccLocked FROM [User] WHERE Username = @username";
                     SqlCommand chkstatuscmd = new SqlCommand(chkstatus, conn);
                     chkstatuscmd.Parameters.AddWithValue("@username", txt_usernameLogin.Text);
+
                     if (flag == true && Convert.ToBoolean(chkstatuscmd.ExecuteScalar().ToString()) == false)
                     {
-                        string getdisplayname = "SELECT Displayname FROM [User] WHERE Username=@username";
-                        SqlCommand cmddisplay = new SqlCommand(getdisplayname, conn);
-                        cmddisplay.Parameters.AddWithValue("@username", txt_usernameLogin.Text);
-                        SqlDataReader reader= cmddisplay.ExecuteReader();
-                        reader.Read();
-                        Session["CHANGE_MASTERPAGE"] = "~/MasterPages/AfterLogin.Master";
-                        Session["CHANGE_MASTERPAGE2"] = null;
-                        Session["username"] = reader["Displayname"].ToString();
-                        reader.Close();
-                        Response.Redirect(Request.Url.AbsoluteUri, false);
-                        Context.ApplicationInstance.CompleteRequest();
+                        if (chckedTFAstatus(txt_usernameLogin.Text))
+                        {
+                            username = txt_usernameLogin.Text;
+                            TFA(txt_usernameLogin.Text);
+                        }
+                        else
+                        {
+                            SqlCommand slctdisplay = new SqlCommand("SELECT * FROM [User] WHERE Username=@username" , conn);
+                            slctdisplay.Parameters.AddWithValue("@username", txt_usernameLogin.Text);
+                            SqlDataReader displayreader = slctdisplay.ExecuteReader();
+                            displayreader.Read();
+                            Session["username"] = displayreader["Username"].ToString();
+                            displayreader.Close();
+                            conn.Close();
+                            Session["CHANGE_MASTERPAGE"] = "~/MasterPages/AfterLogin.Master";
+                            Session["CHANGE_MASTERPAGE2"] = null;
+                            Response.Redirect(Request.Url.AbsoluteUri, false);
+                            Context.ApplicationInstance.CompleteRequest();
+                        }
+                        LoginPopUp.Style.Add("display", "none");
+                        Wrongcredentials.Style.Add("display", "none");
                     }
                     else
                     {
@@ -305,6 +429,163 @@ namespace _211792H.MasterPages
             }
         }
 
+        protected bool chckedTFAstatus(string user)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
+            conn.Open();
+            SqlCommand slctstatus = new SqlCommand("SELECT TFAEnabled FROM [User] WHERE Username=@username" , conn);
+            slctstatus.Parameters.AddWithValue("@username", user);
+            SqlDataReader readerstatus = slctstatus.ExecuteReader();
+            readerstatus.Read();
+            if (readerstatus["TFAEnabled"].ToString() == "True")
+            {
+                readerstatus.Close();
+                conn.Close();
+                return true;
+            }
+
+            else
+            {
+                readerstatus.Close();
+                conn.Close();
+                return false;
+            }
+            
+        }
+
+
+        protected void TFA(string user)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
+            conn.Open();
+            SqlCommand slctemail = new SqlCommand("SELECT Email FROM [User] WHERE Username=@username", conn);
+            slctemail.Parameters.AddWithValue("@username", user);
+            SqlDataReader readeremail = slctemail.ExecuteReader();
+            readeremail.Read();
+            Guid newGUID = Guid.NewGuid();
+            emailLink = newGUID.ToString();
+            MailMessage newMail = new MailMessage();
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            newMail.From = new MailAddress("vannsar04@gmail.com", "Test");
+            newMail.To.Add(readeremail["Email"].ToString());
+            newMail.IsBodyHtml = true;
+            newMail.Body = @"<!DOCTYPE html>
+                                <html>
+                                <head>
+                                    <meta charset=""utf-8"" />
+                                    <title>Two Factor Authentication</title>
+                                </head>
+                                <body>
+                                <b>We have detected a new login attempt into your account</b>
+                                <br/>
+                                <p>Please verify that it is you</p>
+                                <br/> 
+                                </body>
+                                </html>";
+            newMail.Body += "<a href = 'https://localhost:44320/WebPages/TFASuccess2.aspx?token=" + emailLink + "'>Me</a>";
+            newMail.Body += "<br/> <br/> ";
+            newMail.Body += "<a href = 'https://localhost:44320/WebPages/ChangePasswordHijack.aspx?token=" + emailLink + "'>Not Me</a>";
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new System.Net.NetworkCredential("vannsar04@gmail.com", "txirfuzojmaguwmz");
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Send(newMail);
+            fpemail = readeremail["email"].ToString();
+            readeremail.Close();
+            sendtemporaryEmail(emailLink, fpemail);
+            modalpopup.Style.Add("display", "block");
+            string dropTable = "DROP TABLE IF EXISTS [dbo].[TFATemp]";
+            SqlCommand dropTempUser = new SqlCommand(dropTable, conn);
+            dropTempUser.ExecuteNonQuery();
+            string createTable = "CREATE TABLE [dbo].[TFATemp](Email nvarchar(MAX) , Verified bit)";
+            SqlCommand createcmd = new SqlCommand(createTable, conn);
+            createcmd.ExecuteNonQuery();
+            string insertValue = "INSERT INTO [TFATemp](Email , Verified) values (@email , @verified)";
+            SqlCommand insertcmd = new SqlCommand(insertValue, conn);
+            insertcmd.Parameters.AddWithValue("@email", fpemail);
+            insertcmd.Parameters.AddWithValue("@verified", false);
+            insertcmd.ExecuteNonQuery();
+            startDependTFA(fpemail);
+            conn.Close();
+        }
+
+        protected void startDependTFA(string email)
+        {
+            string verified = "SELECT Verified FROM [TFATemp] WHERE Email=@Email";
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
+            conn.Open();
+            SqlCommand verifiedcmd = new SqlCommand(verified, conn);
+            verifiedcmd.Parameters.AddWithValue("@Email", email);
+            SqlDependency.Start(_connectionString);
+            SqlDependency dependency = new SqlDependency(verifiedcmd);
+            dependency.OnChange -= new OnChangeEventHandler(TFAsuccess);
+            dependency.OnChange += new OnChangeEventHandler(TFAsuccess);
+            verifiedcmd.ExecuteReader();
+            conn.Close();
+        }
+
+        protected void stopDependTFA()
+        {
+            SqlDependency.Stop(_connectionString);
+        }
+
+        protected void TFAsuccess(object sender, EventArgs e)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
+            try
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("SELECT Verified FROM [TFATemp] WHERE Email=@Email", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Email", fpemail);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    reader.Read();
+                    Debug.WriteLine(reader["Verified"].ToString());
+                    if (reader["Verified"].ToString() == "True")
+                    {
+                        reader.Close();
+                        stopDependTFA();
+                        TriggerHub.twoFactorAuthenticationsuccess();
+                        conn.Close();     
+                    }
+                    else
+                    {
+                        startDependTFA(fpemail);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error -" + ex);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        protected void TFATest(object sender , EventArgs e)
+        {
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
+            conn.Open();
+            string dropTable = "DROP TABLE IF EXISTS [dbo].[TFATemp]";
+            SqlCommand dropTempUser = new SqlCommand(dropTable, conn);
+            dropTempUser.ExecuteNonQuery();
+            modalpopup.Style.Add("display", "none");
+            Session["CHANGE_MASTERPAGE"] = "~/MasterPages/AfterLogin.Master";
+            Session["CHANGE_MASTERPAGE2"] = null;
+            SqlCommand slctdisplay = new SqlCommand("SELECT * FROM [User] WHERE Username=@username" , conn);
+            slctdisplay.Parameters.AddWithValue("@username", username);
+            SqlDataReader displayreader = slctdisplay.ExecuteReader();
+            displayreader.Read();
+            Session["username"] = displayreader["Username"].ToString();
+            displayreader.Close();
+            conn.Close();
+            Response.Redirect(Request.Url.AbsoluteUri, false);
+            Context.ApplicationInstance.CompleteRequest();
+        }
+
+
 
         protected void Forgetpass(object sender, EventArgs e)
         {
@@ -346,6 +627,7 @@ namespace _211792H.MasterPages
                     reader.Close();
                     sendtemporaryEmail(emailLink , fpemail);
                     ForgetPasswordPopUp.Style.Add("display", "none");
+                    LoadingScreen.Style.Add("display", "none");
                     PRalert.Style.Add("display", "block");
                     txt_ForgetPass.Text = "";
                 }
@@ -369,7 +651,6 @@ namespace _211792H.MasterPages
 
         protected void sendtemporaryEmail(string emailID , string email)
         {
-            Debug.WriteLine("error here");
             SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
             conn.Open();
             string previousemailexist = "SELECT * FROM [TempEmail] WHERE Email=@email";
@@ -520,6 +801,13 @@ namespace _211792H.MasterPages
                 setattemptcmd.ExecuteNonQuery();
             }
             conn.Close();
+        }
+
+
+        protected void Search(object sender, EventArgs e)
+        {
+            Session["Search"] = txtSearch.Text;
+            Response.Redirect("Search.aspx");
         }
     }
 }

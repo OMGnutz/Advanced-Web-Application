@@ -1,0 +1,142 @@
+﻿.misc{
+    width:850px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.breadcrumb{
+    background-image:none;
+    border:none;
+    margin-top:40px;
+}
+
+
+.breadcrumb a{
+    text-decoration:none;
+}
+
+.itemcontainer{
+    width:850px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:10px;
+    background:radial-gradient(black , transparent);
+    padding:20px 0px;
+}
+
+#title{
+    font-weight:500;
+    font-style:italic;
+    font-size:40px;
+    margin-top:20px;
+}
+
+.productimg {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    margin-right:15px;
+    margin-left:20px;
+}
+
+.pricecontainer {
+    width: fit-content;
+}
+
+.discountperc {
+    display: inline-flex;
+    background-color: darkolivegreen;
+    font-weight: bold;
+    color: greenyellow;
+    vertical-align: top;
+    height: 40px;
+    width: 45px;
+    align-items: center;
+    justify-content: center;
+}
+
+.discountperc > * {
+    vertical-align: middle;
+}
+
+.itemdesc{
+    display:inline-flex;
+    width:500px;
+    overflow:hidden;
+    height:fit-content;
+    vertical-align:middle;
+    flex-direction:column;
+}
+
+#prodGame{
+    font-weight:bold;
+    text-transform:capitalize;
+    font-size:25px;
+}
+
+
+
+.buttons{
+    width:fit-content;
+    position:relative;
+    left:160px;
+}
+
+
+.itemReviews{
+    width:850px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:20px;   
+}
+
+.indiReviews{
+    padding:10px 10px;
+    border:1px solid black;
+}
+
+.rvwname{
+    font-weight:bold;
+}
+
+.rvwPostedTime{
+    font-size:11px;
+}
+
+.rvwImg {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.rvwprofilepic {
+    width: 50px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.rvwreccomendation{
+    color:white;
+}
+
+#NumberReviews{
+    font-weight:bold;
+    font-size:14px;
+}
+
+.reviewratings {
+    background: radial-gradient(black, transparent);
+}
+
+
+table {
+    table-layout: fixed;
+    width: 500px;
+}
+
+th,
+td {
+    width: 500px;
+    overflow: hidden;
+}
+

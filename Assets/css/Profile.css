@@ -1,0 +1,125 @@
+﻿.indiproducts {
+    border: 1px solid black;
+    padding: 20px 0px 0px 0px;
+    overflow: hidden;
+    height: 270px;
+}
+
+.indiproducts .pricecontainer {
+    position: relative;
+    margin-left: 195px;
+    top: -90px;
+    width: fit-content;
+}
+
+.indiproducts .lbldiscount {
+    display: block;
+    color: white;
+}
+
+.indiproducts .buttons {
+    width: auto;
+    float: right;
+    position: relative;
+    bottom: 120px;
+    margin-right: 40px;
+}
+
+.productimg {
+    width: 150px;
+    height: 150px;
+    margin-left: 15px;
+    object-fit: contain;
+    position: relative;
+    top: 30px;
+}
+
+#NoResults {
+    display: none;
+    text-align: center;
+}
+
+#header {
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 20px;
+}
+
+
+
+.itemcontainer {
+    width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.prodDetails {
+    position: relative;
+    width: fit-content;
+    margin-left: 195px;
+    top: -100px;
+}
+
+.productname {
+    color: white;
+}
+
+.productRD {
+    display: block;
+    font-size: 12px;
+}
+
+.discountperc {
+    display: inline-flex;
+    background-color: darkolivegreen;
+    font-weight: bold;
+    color: greenyellow;
+    vertical-align: top;
+    height: 40px;
+    width: 45px;
+    align-items: center;
+    justify-content: center;
+}
+
+    .discountperc > * {
+        vertical-align: middle;
+    }
+
+.OverallReviews {
+    width: fit-content;
+    position: relative;
+    margin-left: 195px;
+    top: -70px;
+}
+
+
+#usrimg{
+    width:200px;
+    height:200px;
+    object-fit:contain;
+}
+
+#usrname{
+    font-size:20px;
+}
+
+#recentlyp{
+    text-align:center;
+    font-weight:bold;
+    font-size:25px;
+}
+
+#editprofile{
+    margin-left:20px;
+}
+
+.breadcrumb {
+    background-image: none;
+    border: none;
+    margin-top: 40px;
+}
+
+
+.breadcrumb a {
+    text-decoration: none;
+}

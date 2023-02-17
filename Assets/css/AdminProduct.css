@@ -1,11 +1,36 @@
-﻿
-
-
-.indiproducts{
+﻿.indiproducts{
     border: 1px solid black;
+    padding: 20px 20px 0px 0px;
+    height:200px;
+}
+
+.indiproducts .pricecontainer{
+    position:relative;
+    margin-left:165px;
+    top:-70px;
+}
+
+.indiproducts .lbldiscount {
+    display: inline-block;
+}
+
+.indiproducts .buttons {
+    position: relative;
+    float: right;
+    top: -100px;
 }
 
 .productimg{
-    width:135px;
-    height:200px;
+    width:150px;
+    height:150px;
+    margin-left:10px;
+    object-fit:contain;
+}
+
+#search{
+    width:200px;
+}
+
+.breadcrumb-item a {
+    text-decoration:none;
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -22,11 +23,15 @@ namespace _211792H.App_Code
         private decimal? _DiscountedPrice = null;
         private DateTime? _ReleaseDate = null;
         private int? _TimesBought = 0;
+        private DateTime? _SaleTime = null;
 
+        public Product()
+        {
+        }
 
         public Product(string prodID, string prodName, string prodDesc, string prodImg,
                    decimal prodPrice, string prodGame, string prodCategory, string prodGenre ,string prodReviews,
-                   decimal? discountedprice , DateTime releaseDate , int? TimesBought)
+                   decimal? discountedprice , DateTime releaseDate , int? TimesBought , DateTime? sale)
         {
             _prodID = prodID;
             _prodName = prodName;
@@ -40,15 +45,14 @@ namespace _211792H.App_Code
             _DiscountedPrice = discountedprice;
             _ReleaseDate = releaseDate;
             _TimesBought = TimesBought;
+            _SaleTime = sale;
         }
 
         public Product(string prodID, string prodName, string prodDesc, string prodImg,
                        decimal prodPrice, string prodGame, string prodGenre, DateTime releaseDate)
-            :this (prodID , prodName , prodDesc , prodImg , prodPrice , prodGame , null , prodGenre , null , null , releaseDate , null)
+            :this (prodID , prodName , prodDesc , prodImg , prodPrice , prodGame , null , prodGenre , null , null , releaseDate , null , null )
         {  
         }
-
-        
 
         public string Product_ID
         {
@@ -131,14 +135,22 @@ namespace _211792H.App_Code
             set { _TimesBought = value; }
         }
 
+        public DateTime? Product_SalesDate
+        {
+            get { return _SaleTime; }
+            set { _SaleTime = value; }
+        }
+
         public Product getProduct(string prodID)
         {
             Product prodDetail = null;
             string prodName, prodDesc, prodGame, prodGenre, prodReviews, prodImage, prodCategory;
-            decimal prodPrice, prodDiscountedPrice;
-            int prodSales;
+            decimal prodPrice;
+            decimal? prodDiscountedPrice;
+            int? prodSales;
             DateTime prodReleasedDate;
-
+            DateTime? prodSaleTime;
+            
             string query = "SELECT * FROM [GameProducts] WHERE Id=@prodid";
             SqlConnection conn = new SqlConnection(_connStr);
             SqlCommand selectprod = new SqlCommand(query, conn);
@@ -151,16 +163,43 @@ namespace _211792H.App_Code
                 prodDesc = reader["Description"].ToString();
                 prodPrice = decimal.Parse(reader["Price"].ToString());
                 prodImage = reader["Image"].ToString();
-                prodGame = reader["Game"].ToString() ;
+                prodGame = reader["GameOrigin"].ToString() ;
                 prodCategory = reader["Category"].ToString();
                 prodGenre = reader["Genre"].ToString();
                 prodReviews = reader["OverallReviews"].ToString();
-                prodDiscountedPrice = decimal.Parse(reader["DiscountedPrice"].ToString()) ;
-                prodSales = Int32.Parse(reader["TimesBought"].ToString());
-                prodReleasedDate = DateTime.Parse(reader["ReleaseDate"].ToString());
+                if (reader["DiscountedPrice"].ToString() != "")
+                {
+                    prodDiscountedPrice = Convert.ToDecimal(reader["DiscountedPrice"]);
+                }
+                else
+                {
+                    prodDiscountedPrice = null;
+                }
+                if (reader["TimesBought"].ToString() != "")
+                {
+                    prodSales = Convert.ToInt32(reader["TimesBought"]);
+                }
 
+                else
+                {
+                    prodSales = null;
+                }
+
+                if(reader["SaleTime"].ToString() != "")
+                {
+                    prodSaleTime = DateTime.Parse(reader["SaleTime"].ToString());
+                }
+
+                else
+                {
+                    prodSaleTime = null;
+                }
+                
+                prodReleasedDate = DateTime.Parse(reader["ReleaseDate"].ToString());
+                
+                
                 prodDetail = new Product(prodID, prodName, prodDesc, prodImage, prodPrice, prodGame,
-                                         prodCategory, prodGenre, prodReviews, prodDiscountedPrice, prodReleasedDate, prodSales);
+                                         prodCategory, prodGenre, prodReviews, prodDiscountedPrice, prodReleasedDate, prodSales, prodSaleTime);
             }
 
             else

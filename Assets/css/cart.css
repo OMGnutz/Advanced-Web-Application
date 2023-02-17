@@ -1,0 +1,75 @@
+﻿#tb_Quantity{
+    width:50px;
+    height:fit-content;
+    padding:5px 10px;
+    text-align:center;
+    position:relative;
+    top:2px;
+}
+
+.cartcontainer{
+    width:850px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:40px;
+}
+
+.pricecontainer {
+    width: fit-content;
+}
+
+.discountperc {
+    display: inline-flex;
+    background-color: darkolivegreen;
+    font-weight: bold;
+    color: greenyellow;
+    vertical-align: top;
+    height: 40px;
+    width: 45px;
+    align-items: center;
+    justify-content: center;
+}
+
+.discountperc > * {
+    vertical-align: middle;
+}
+
+
+#linkRemove{
+    position:relative;
+    left:220px;
+    bottom:10px;
+}
+
+.Cartimage{
+    height:220px;
+    width:150px;
+    object-fit:contain;
+}
+
+#btnUpdate{
+    height:fit-content;
+    margin-left:10px;
+    font-size:13px;
+    padding: 10px 10px;
+}
+
+.cartItems{
+    margin-right:80px;
+    display:inline-block;
+}
+
+.ordersummary{
+    display:inline-block;
+    width:250px;
+    float:right;
+}
+
+#btnCheckOut{
+    width:100%;
+}
+
+
+.ordersummary p{
+    margin-top:1rem;
+}

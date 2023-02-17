@@ -1,7 +1,6 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AfterLogin.master.cs" Inherits="_211792H.MasterPages.AfterLogin" %>
 
 <!DOCTYPE html>
-
 <html>
 <head runat="server">
     <title></title>
@@ -14,7 +13,12 @@
 
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" >
+
+        <div class="alert alert-dismissible alert-danger" id="emptycart" runat="server" style="width:700px;">
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <strong>Error!</strong> Your cart is empty.
+        </div>
 
        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="LoginTopNav">
           <div class="container-fluid">
@@ -23,7 +27,7 @@
               <ul class="navbar-nav ">
                
                 <li class="nav-item ms-auto">
-                  <a class="nav-link" href="#" style="padding-right:30px; padding-left:30px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                  <a class="nav-link" href="../WebPages/Wishlist.aspx" style="padding-right:30px; padding-left:30px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
                   <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
                   </svg></a>
                 </li>
@@ -31,17 +35,38 @@
                   <a class="nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="padding-right:30px; padding-left:30px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
                   <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
                   </svg></a>
-                  <div class="dropdown-menu" id="notimenu" style="left:auto; right:0;">
-                     <%--Notification menu append here--%>
+                  <div class="dropdown-menu" id="notimenu" style="left:auto; right:0; width:400px;">
+                  <asp:ScriptManager EnablePartialRendering="true" ID="ScriptManager1" runat="server"></asp:ScriptManager>
+                  <asp:UpdatePanel ID="UpdatePanel1"  runat="server" UpdateMode="Conditional">
+                     <ContentTemplate>
+                     <p class="dropdown-item" runat="server" id="nonewnoti" style="display:none; text-align:center; margin-top:20px;">You have no new notifications</p>
+                     <asp:Repeater ID="RepeaterNoti" runat="server">
+                            <ItemTemplate> 
+                                         <div class="indiNoti" style="margin-bottom:10px;" onclick="noticlick(this)">
+                                            <div class="Notiinfo" id="parentnoti" runat="server">
+                                                <asp:LinkButton runat="server" id="notiprdbutt" ClientIDMode="Static" CommandArgument='<%#Eval("Id").ToString()%>' OnClick="notiprd"></asp:LinkButton>
+                                                <asp:Image runat="server" CssClass="notiprofilepic" ImageUrl='<%# "/Webpages/" + Eval("Image").ToString()%>'/>
+                                                <asp:Label runat="server" CssClass="notidesc" Text='<%#Eval("NotiDesc").ToString()%>' ></asp:Label>
+                                                <asp:LinkButton runat="server" ClientIDMode="Static" ID="clearnotibutt" CommandArgument='<%#Eval("Id").ToString()%>' OnClick="clearnoti"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                </svg></asp:LinkButton>
+                                            </div>
+                                          </div>
+                                          <div class="dropdown-divider"></div>
+                            </ItemTemplate>
+                    </asp:Repeater>
+                      </ContentTemplate>
+                  </asp:UpdatePanel>
                   </div>
+
                 </li>
 
                 <li class="nav-item dropdown ms-auto" >
                   <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="userdropdown" runat="server"></a>
                   <div class="dropdown-menu"  style="left:auto; right:0;">
-                     <a class="dropdown-item"" href="#">User Profile</a>
+                     <a class="dropdown-item"" href="../WebPages/Profile.aspx">User Profile</a>
                      <div class="dropdown-divider"></div>
-                     <a class="dropdown-item" href="#">Account Details</a>
+                     <a class="dropdown-item" href="../WebPages/AccountDetail.aspx">Account Details</a>
                      <div class="dropdown-divider"></div>
                      <asp:Button CssClass="dropdown-item" ID="btnlogout" runat="server" Text="Logout" UseSubmitBehavior="false" OnClick="btnlogout_Click"></asp:Button>    
                   </div>
@@ -52,33 +77,77 @@
         </nav>
 
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="nav">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="nav" runat="server">
           <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarColor02">
+            <a class="navbar-brand" href="/WebPages/Home.aspx">Logo</a>
+            <div class="collapse navbar-collapse" id="navbarColor01">
               <ul class="navbar-nav me-auto">
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">New & Noteworthy</a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="/WebPages/Category.aspx?Category=top sellers">Top Sellers</a>
+                    <a class="dropdown-item" href="/WebPages/Category.aspx?Category=new releases">New Releases</a>
+                    <a class="dropdown-item" href="/WebPages/Category.aspx?Category=best reviews">Best Reviews</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
+                    <a class="dropdown-item" href="/WebPages/Category.aspx?Category=special offers">Special Offers</a>
                   </div>
                 </li>
 
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Categories</a>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
+                  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Genre</a>
+                  <div class="dropdown-menu" style="width:590px;">
+                    <span class="text-info" style="margin-left:20px;"><b>Genre</b></span>
+                      <br />
+                      <br />
+                      <div style="display:inline-block" class="genreitems">
+                          <span><b>First Person Shooter</b></span>
+                            <ul>
+                                <li><a href="/WebPages/Genre.aspx?Genre=valorant">Valorant</a></li>
+                                <li><a href="/WebPages/Genre.aspx?Genre=csgo">CSGO</a></li>
+                                <li><a href="#">Rainbow 6 Siege</a></li>
+                            </ul>
+                            <br /> 
+
+                          <span><b>Third Person Shooter</b></span>
+                            <ul>
+                              <li><a href="#">Fortnite</a></li>
+                              <li><a href="#">PUBG</a></li>
+                              <li><a href="#">GTA V</a></li>
+                            </ul>
+                            <br />
+
+                          <span><b>RPG</b></span>
+                            <ul>
+                                <li><a href="#">Elden Ring</a></li>
+                                <li><a href="/WebPages/Genre.aspx?Genre=brawhalla">Brawhalla</a></li>
+                                <li><a href="/WebPages/Genre.aspx?Genre=escape simulator">Escape Simulator</a></li>
+                            </ul>
+
+                      </div>
+                      <div style="display:inline-block; margin-left:50px;" class="genreitems">
+                          <span><b>MMO</b></span>
+                          <ul>
+                              <li><a href="/WebPages/Genre.aspx?Genre=league of legends">League Of Legends</a></li>
+                              <li><a href="#">World Of Warcraft</a></li>
+                              <li><a href="#">RuneScape</a></li>
+                          </ul>
+                          <br />
+
+                          <span><b>Horror</b></span>
+                          <ul>
+                              <li><a href="/WebPages/Genre.aspx?Genre=among us">Among Us</a></li>
+                              <li><a href="/WebPages/Genre.aspx?Genre=minecraft">Minecraft</a></li>
+                              <li><a href="#">Roblox</a></li>
+                          </ul>
+                          <br />
+
+                          <span><b>Fighting</b></span>
+                          <ul>
+                              <li><a href="#">Mortal Kombat 11</a></li>
+                              <li><a href="#">Gang Beasts</a></li>
+                              <li><a href="#">Pico Park</a></li>
+                          </ul>
+                      </div>
                   </div>
                 </li>
 
@@ -87,18 +156,53 @@
                 </li>
 
               </ul>
-              <form class="d-flex" action="#">
-                <input class="form-control me-sm-2" type="search" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-              </form>
+                <asp:TextBox runat="server" ID="txtSearch" ClientIDMode="Static" CssClass="form-control me-sm-2" PlaceHolder="Search"></asp:TextBox>
+                <asp:Button runat="server" ID="buttSearch" CssClass="btn btn-secondary my-0 my-sm-0" ClientIDMode="Static" OnClick="Search" Text="Search"/>
+                
             </div>
           </div>
         </nav>
 
+        <div class="cartdiv" id="carticon" runat="server">
+            <a href="ViewCart.aspx"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg></a>
+        </div>
+
         
-            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-            </asp:ContentPlaceHolder>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
         
     </form>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript"> 
+        document.getElementById("buttSearch").style.width = "100px";
+        document.getElementById("txtSearch").addEventListener("keyup", function (event) {
+            console.log(event.keyCode)
+            if (event.keyCode === 13) {
+                
+                document.getElementById("buttSearch").click();
+            }
+        })
+
+        function noticlick(el) {
+            console.log(el);
+            el.querySelector("#notiprdbutt").click();
+        }
+
+        
+
+            
+            
+      
+
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".alert").delay(5000).slideUp(300);
+        });
+    </script>
 </body>
 </html>

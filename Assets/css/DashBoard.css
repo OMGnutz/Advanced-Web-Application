@@ -1,0 +1,32 @@
+﻿.databox{
+    display:inline-block;
+    width:180px;
+    border:1px solid black;
+    padding-bottom:10px;
+    margin-right:10px;
+    margin-bottom:20px;
+
+}
+
+#topcontent{
+    margin-top:35px;
+    width:fit-content;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.databoxheader{
+    height:29px;
+    margin-bottom:10px;
+}
+
+.dataTitle{
+    color:black;
+    font-weight:600;
+    margin-left:10px;
+}
+
+.ttlLabel{
+    color:white;
+    margin-left:10px;
+}

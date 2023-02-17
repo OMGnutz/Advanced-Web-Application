@@ -12,5 +12,11 @@ namespace _211792H
             IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TriggerHub>();
             context.Clients.All.updateMessages();
         }
+
+        public static void twoFactorAuthenticationsuccess()
+        {
+            IHubContext context = GlobalHost.ConnectionManager.GetHubContext<TriggerHub>();
+            context.Clients.All.addMessage("TFA Authenticated");
+        }
     }
 }

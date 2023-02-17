@@ -26,6 +26,14 @@ namespace _211792H.WebPages.Admin
             var button = (LinkButton)sender;
             var agrs = button.CommandArgument.ToString();
             Debug.WriteLine(agrs);
+            SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["ShopDB"].ConnectionString);
+            conn.Open();
+            string deleteitem = "DELETE FROM [GameProducts] WHERE Id=@id";
+            SqlCommand cmd = new SqlCommand(deleteitem, conn);
+            cmd.Parameters.AddWithValue("id", agrs);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            Response.Redirect(Request.RawUrl);
         }
 
         protected void Addprod(object sender, EventArgs e)

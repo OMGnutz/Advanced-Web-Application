@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _211792H.App_Code;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,21 @@ namespace _211792H.MasterPages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["username"] != null)
+            {
+                userdropdown.InnerText = Session["username"].ToString();
 
+            }
+            else
+            {
+                btnlogout_Click(sender, e);
+            }
+        }
+
+        protected void btnlogout_Click(object sender, EventArgs e)
+        {
+            Session["username"] = null;
+            Response.Redirect("../Home.aspx");
         }
     }
 }

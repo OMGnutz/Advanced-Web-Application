@@ -1,20 +1,113 @@
 ﻿.sidecontainer {
-    height: 1000px;
+    height: 800px;
     text-align: left;
     margin-bottom: 50px;
     margin-top: 70px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 20px;
+    float:left;
     text-decoration: none;
     position: absolute;
     width: 300px;
-    left: 10%;
 }
 
-    .sidecontainer a {
-        display: block;
-        padding-top: 10px;
-        margin-top: 7px;
-        margin-left: 20px;
-        text-decoration: none;
+.sidecontainer a {
+    display: block;
+    padding-top: 10px;
+    margin-top: 7px;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.carousel-inner{
+    width:700px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.carousel-inner .col{
+    text-align:center;
+}
+
+.img-fluid {
+    height: 150px;
+    width: 150px;
+    object-fit: contain;
+    margin-top: 10px;
+    background-color: #3a3f44;
+}
+
+#CarouselSpecialOffers {
+    width: 850px;
+    background-image: url("../../images/SpecialOffersBackground.png");
+    text-align: center;
+    height: 300px;
+}
+
+#carouselgenre {
+    text-align: center;
+    margin-top: 150px;
+    height: 300px;
+    width: 850px;
+    background-image: url("../../images/genrebackground.png");
+}
+
+#carouselgenre .carouselgenreimg {
+    background-color: transparent;
+    transition: transform .5s;
+    object-fit:cover;
+}
+
+#carouselgenre .carousel-control-prev, .carousel-control-next{
+    width:10%;
+}
+
+#carouselgenre .carouselgenreimg:hover {
+    transform: translateZ(0) scale(1.04);
+}
+
+.imagepopover {
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.carouselheader{
+    color:white;
+    font-style:italic;
+}
+
+.carouselitemlabel {
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.carousel-control-prev:hover{
+    background:none;
+}
+
+.carousel-control-next:hover {
+    background: none;
+}
+
+.carousel .carousel-control-prev, .carousel-control-next{
+    top:-40px;
+}
+
+#hotreleases {
+    margin-top: 150px;
+    width: 850px;
+    text-align:center;
+}
+
+.custom-popover {
+    color: red;
+}
+
+@media only screen and (max-width: 1080px) {
+    .sidecontainer{
+        display:none;
     }
+}

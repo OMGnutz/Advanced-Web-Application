@@ -9,7 +9,7 @@
     </asp:ContentPlaceHolder>
     <link rel="stylesheet" type="text/css" href="../Assets/css/bootstraptheme.css" runat="server" />
     <link rel="stylesheet" type="text/css" href="../Assets/css/AdminBase.css" runat="server" />
-   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -22,13 +22,10 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                   <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                      <asp:Image runat="server" ID="userimage" CssClass="nav-link"/>  
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="username"></a>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Logout</a>
+                   <li class="nav-item dropdown ms-auto" >
+                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" id="userdropdown" runat="server"></a>
+                      <div class="dropdown-menu"  style="left:auto; right:0;">
+                         <asp:Button CssClass="dropdown-item" ID="btnlogout" runat="server" Text="Logout" UseSubmitBehavior="false" OnClick="btnlogout_Click"></asp:Button>    
                       </div>
                     </li>
                   </ul> 
@@ -37,10 +34,10 @@
             </nav>
 
             <div class="sidebar bg-primary" style="position: fixed; top:0px;">
-              <a class="active" href="#home" id="Dashboardlink">Dashboard</a>
+              <a class="active" href="Dashboard.aspx" id="Dashboardlink">Dashboard</a>
               <a href="#news" id="OrdersLink">Manage Orders</a>
               <a href="../Admin/GameProducts.aspx" id="ProductsLink">Manage Products</a>
-              <a href="#about" id="UsersLink">Manage Users</a>
+              <a href="../Admin/ManageUsers.aspx" id="UsersLink">Manage Users</a>
             </div>
 
                 <div class="contents" style="margin-left:200px">
@@ -58,5 +55,7 @@
             $(".alert").delay(5000).slideUp(300);
         });
     </script>
+
+
 </body>
 </html>

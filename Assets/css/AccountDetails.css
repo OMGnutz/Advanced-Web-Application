@@ -1,0 +1,44 @@
+﻿.box{
+    border:1px solid black;
+    height:250px;
+    margin-bottom:100px;
+}
+
+.boxheader{
+    border-bottom:1px solid black;
+    margin-top:20px;
+    padding: 0 20px;
+}
+
+
+.title{
+    font-weight:bold;
+    font-size:20px;
+}
+
+
+.boxcontents{
+    margin-left:20px;
+    margin-top:20px;
+}
+
+.breadcrumb {
+    background-image: none;
+    border: none;
+    margin-top: 40px;
+}
+
+
+.breadcrumb a {
+    text-decoration: none;
+}
+
+#changepassbutt{
+    margin-left:20px;
+    position:relative;
+    top:-10px;
+}
+
+#TFAbutt {
+    margin-top: 15px;
+}

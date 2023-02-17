@@ -336,11 +336,21 @@
     <Content Include="App_Data\Shop_log.ldf">
       <DependentUpon>Shop.mdf</DependentUpon>
     </Content>
+    <Content Include="Assets\css\AccountDetails.css" />
     <Content Include="Assets\css\AdminBase.css" />
     <Content Include="Assets\css\AdminProduct.css" />
     <Content Include="Assets\css\Base.css" />
     <Content Include="Assets\css\bootstraptheme.css" />
+    <Content Include="Assets\css\cart.css" />
+    <Content Include="Assets\css\DashBoard.css" />
+    <Content Include="Assets\css\EditProfile.css" />
     <Content Include="Assets\css\Home.css" />
+    <Content Include="Assets\css\ManageUser.css" />
+    <Content Include="Assets\css\Payment.css" />
+    <Content Include="Assets\css\Product.css" />
+    <Content Include="Assets\css\Products.css" />
+    <Content Include="Assets\css\Profile.css" />
+    <Content Include="Assets\js\product.js" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -365,12 +375,28 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="MasterPages\AfterLogin.Master" />
     <Content Include="MasterPages\Base.Master" />
+    <Content Include="WebPages\AccountDetail.aspx" />
     <Content Include="WebPages\Admin\AddProduct.aspx" />
     <Content Include="WebPages\Admin\Dashboard.aspx" />
     <Content Include="WebPages\Admin\GameProducts.aspx" />
+    <Content Include="WebPages\Admin\GiveDiscount.aspx" />
+    <Content Include="WebPages\Admin\GiveDiscountCategory.aspx" />
+    <Content Include="WebPages\Admin\GiveDiscountProd.aspx" />
+    <Content Include="WebPages\Admin\ManageUsers.aspx" />
+    <Content Include="WebPages\Category.aspx" />
+    <Content Include="WebPages\ChangePassword.aspx" />
+    <Content Include="WebPages\ChangePasswordHijack.aspx" />
     <Content Include="WebPages\EmailExpired.aspx" />
+    <Content Include="WebPages\GameProduct.aspx" />
+    <Content Include="WebPages\Genre.aspx" />
     <Content Include="WebPages\PasswordChanged.aspx" />
     <Content Include="MasterPages\Admin2.Master" />
+    <Content Include="WebPages\Payment.aspx" />
+    <Content Include="WebPages\Profile.aspx" />
+    <Content Include="WebPages\ProfileEdit.aspx" />
+    <Content Include="WebPages\TFASuccess2.aspx" />
+    <Content Include="WebPages\ViewCart.aspx" />
+    <Content Include="WebPages\Wishlist.aspx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -378,6 +404,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <Content Include="Scripts\jquery.signalR-2.4.3.js" />
     <Content Include="Scripts\jquery.signalR-2.4.3.min.js" />
+    <Content Include="WebPages\Search.aspx" />
     <Content Include="WebPages\VerifyEmailExpired.aspx" />
     <Content Include="WebPages\EmailVerified.aspx" />
     <Content Include="WebPages\ForgetPassword.aspx" />
@@ -389,8 +416,81 @@
     <Compile Include="App_Code\BaseMaster.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="WebPages\AccountDetail.aspx.cs">
+      <DependentUpon>AccountDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\AccountDetail.aspx.designer.cs">
+      <DependentUpon>AccountDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Admin\ManageUsers.aspx.cs">
+      <DependentUpon>ManageUsers.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Admin\ManageUsers.aspx.designer.cs">
+      <DependentUpon>ManageUsers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\ChangePasswordHijack.aspx.cs">
+      <DependentUpon>ChangePasswordHijack.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\ChangePasswordHijack.aspx.designer.cs">
+      <DependentUpon>ChangePasswordHijack.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Payment.aspx.cs">
+      <DependentUpon>Payment.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Payment.aspx.designer.cs">
+      <DependentUpon>Payment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Profile.aspx.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Profile.aspx.designer.cs">
+      <DependentUpon>Profile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\ProfileEdit.aspx.cs">
+      <DependentUpon>ProfileEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\ProfileEdit.aspx.designer.cs">
+      <DependentUpon>ProfileEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\TFASuccess2.aspx.cs">
+      <DependentUpon>TFASuccess2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\TFASuccess2.aspx.designer.cs">
+      <DependentUpon>TFASuccess2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\ViewCart.aspx.cs">
+      <DependentUpon>ViewCart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\ViewCart.aspx.designer.cs">
+      <DependentUpon>ViewCart.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Wishlist.aspx.cs">
+      <DependentUpon>Wishlist.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Wishlist.aspx.designer.cs">
+      <DependentUpon>Wishlist.aspx</DependentUpon>
+    </Compile>
     <Content Include="App_Code\CheckProductNameExistController.cs" />
+    <Content Include="App_Code\CodeBehindCommsController.cs" />
     <Compile Include="App_Code\Product.cs" />
+    <Compile Include="App_Code\ShoppingCart.cs" />
+    <Compile Include="App_Code\ShoppingCartItem.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="MasterPages\Admin2.Master.cs">
       <DependentUpon>Admin2.Master</DependentUpon>
@@ -422,12 +522,61 @@
     <Compile Include="WebPages\Admin\GameProducts.aspx.designer.cs">
       <DependentUpon>GameProducts.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WebPages\Admin\GiveDiscount.aspx.cs">
+      <DependentUpon>GiveDiscount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Admin\GiveDiscount.aspx.designer.cs">
+      <DependentUpon>GiveDiscount.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Admin\GiveDiscountCategory.aspx.cs">
+      <DependentUpon>GiveDiscountCategory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Admin\GiveDiscountCategory.aspx.designer.cs">
+      <DependentUpon>GiveDiscountCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Admin\GiveDiscountProd.aspx.cs">
+      <DependentUpon>GiveDiscountProd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Admin\GiveDiscountProd.aspx.designer.cs">
+      <DependentUpon>GiveDiscountProd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Category.aspx.cs">
+      <DependentUpon>Category.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Category.aspx.designer.cs">
+      <DependentUpon>Category.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebPages\EmailExpired.aspx.cs">
       <DependentUpon>EmailExpired.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebPages\EmailExpired.aspx.designer.cs">
       <DependentUpon>EmailExpired.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\GameProduct.aspx.cs">
+      <DependentUpon>GameProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\GameProduct.aspx.designer.cs">
+      <DependentUpon>GameProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Genre.aspx.cs">
+      <DependentUpon>Genre.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Genre.aspx.designer.cs">
+      <DependentUpon>Genre.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebPages\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebPages\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebPages\VerifyEmailExpired.aspx.cs">
       <DependentUpon>VerifyEmailExpired.aspx</DependentUpon>
@@ -516,10 +665,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\js\" />
     <Folder Include="images\" />
     <Folder Include="Views\CheckProductNameExist\" />
     <Folder Include="Views\CheckUsernameTaken\" />
+    <Folder Include="Views\CodeBehindComms\" />
     <Folder Include="Views\Default\" />
   </ItemGroup>
   <PropertyGroup>
